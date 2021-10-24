@@ -9,6 +9,7 @@ class Ship
     private int $weaponPower = 0;
     private int $strength = 1;
     private int $jediFactor = 0;
+   // private bool $underRepair;
 
     public function getName(): ?string
     {

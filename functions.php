@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/lib/Ship.php';
+require __DIR__.'/lib/BattleResult.php';
 
 /** @return list<Ship> */
 function get_ships(): array
@@ -47,7 +48,10 @@ function get_ships(): array
  * @param $ship2Quantity
  * @return array With keys winning_ship, losing_ship & used_jedi_powers
  */
-function battle(Ship $ship1, $ship1Quantity, Ship $ship2, $ship2Quantity): array
+function battle(Ship $ship1,
+                $ship1Quantity,
+                Ship $ship2,
+                $ship2Quantity): BattleResult
 {
     $ship1Health = $ship1->getStrength() * $ship1Quantity;
     $ship2Health = $ship2->getStrength() * $ship2Quantity;
