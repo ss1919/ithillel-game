@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/functions.php';
+require __DIR__ . '/bootstrap.php';
 
 $ships = get_ships();
 
@@ -27,7 +27,8 @@ if ($ship1Quantity <= 0 || $ship2Quantity <= 0) {
 $ship1 = $ships[$ship1Name];
 $ship2 = $ships[$ship2Name];
 
-$outcome = battle($ship1, $ship1Quantity, $ship2, $ship2Quantity);
+$battleManager = new BattleManager();
+$outcome = $battleManager->battle($ship1, $ship1Quantity, $ship2, $ship2Quantity);
 ?>
 
 <html lang="ru">
@@ -74,9 +75,9 @@ $outcome = battle($ship1, $ship1Quantity, $ship2, $ship2Quantity);
         <h3 class="text-center audiowide">
             Winner:
             <?php
-            if ($outcome['winning_ship']): ?>
+            if ($outcome->isThereAWinner()): ?>
                 <?php
-                echo $outcome['winning_ship']->getName(); ?>
+                echo $outcome->getWinner()->getName(); ?>
             <?php
             else: ?>
                 Ничья
@@ -85,20 +86,19 @@ $outcome = battle($ship1, $ship1Quantity, $ship2, $ship2Quantity);
         </h3>
         <p class="text-center">
             <?php
-            if ($outcome['winning_ship'] == null): ?>
-
+            if (!$outcome->isThereAWinner()): ?>
                 Корабли уничтожили друг друга в эпической битве.
             <?php
             else: ?>
                 The <?php
-                echo $outcome['winning_ship']->getName(); ?>
+                echo $outcome->getWinner()->getName(); ?>
                 <?php
-                if ($outcome['used_jedi_powers']): ?>
+                if ($outcome->isJediPowerUsed()): ?>
                     использовал свои Силу Джедая для ошеломляющей победы!
                 <?php
                 else: ?>
                     одолели и уничтожили  <?php
-                    echo $outcome['losing_ship']->getName() ?>s
+                    echo $outcome->getLooser()->getName(); ?>s
                 <?php
                 endif; ?>
             <?php
