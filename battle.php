@@ -58,56 +58,88 @@ $outcome = $battleManager->battle($ship1, $ship1Quantity, $ship2, $ship2Quantity
     <div class="page-header">
         <h1>Космическая битва</h1>
     </div>
-    <div>
-        <h2 class="text-center">Столкновение:</h2>
-        <p class="text-center">
-            <br>
-            <?php
-            echo $ship1Quantity; ?> <?php
-            echo $ship1->getName(); ?><?php
-            echo $ship1Quantity > 1 ? 's' : ''; ?>
-            VS.
-            <?php
-            echo $ship2Quantity; ?> <?php
-            echo $ship2->getName(); ?><?php
-            echo $ship2Quantity > 1 ? 's' : ''; ?>
-        </p>
-    </div>
-    <div class="result-box center-block">
-        <h3 class="text-center audiowide">
-            Winner:
-            <?php
-            if ($outcome->isThereAWinner()): ?>
+    <h2 class="text-center">Столкновение:</h2>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <p class="text-center">
+                    <br>
+                    <?php
+                    echo $ship1Quantity; ?> <?php
+                    echo $ship1->getName(); ?><?php
+                    echo $ship1Quantity > 1 ? 's' : ''; ?>
+                    VS.
+                    <?php
+                    echo $ship2Quantity; ?> <?php
+                    echo $ship2->getName(); ?><?php
+                    echo $ship2Quantity > 1 ? 's' : ''; ?>
+                </p>
+            </h3>
+        </div>
+
+        <div class="result-box center-block">
+            <h3 class="text-center audiowide">
+                Winner:
                 <?php
-                echo $outcome->getWinner()->getName(); ?>
-            <?php
-            else: ?>
-                Ничья
-            <?php
-            endif; ?>
-        </h3>
-        <p class="text-center">
-            <?php
-            if (!$outcome->isThereAWinner()): ?>
-                Корабли уничтожили друг друга в эпической битве.
-            <?php
-            else: ?>
-                The <?php
-                echo $outcome->getWinner()->getName(); ?>
-                <?php
-                if ($outcome->isJediPowerUsed()): ?>
-                    использовал свои Силу Джедая для ошеломляющей победы!
+                if ($outcome->isThereAWinner()): ?>
+                    <?php
+                    echo $outcome->getWinner()->getName(); ?>
                 <?php
                 else: ?>
-                    одолели и уничтожили  <?php
-                    echo $outcome->getLooser()->getName(); ?>s
+                    Ничья
                 <?php
                 endif; ?>
-            <?php
-            endif; ?>
-        </p>
+            </h3>
+            <div class="alert alert-success">
+                <p class="text-center">
+                    <?php
+                    if (!$outcome->isThereAWinner()): ?>
+                        Корабли уничтожили друг друга в эпической битве.
+                    <?php
+                    else: ?>
+                        The <?php
+                        echo $outcome->getWinner()->getName(); ?>
+                        <?php
+                        if ($outcome->isJediPowerUsed()): ?>
+                            использовал свои Силу Джедая для ошеломляющей победы!
+                        <?php
+                        else: ?>
+                            одолели и уничтожили  <?php
+                            echo $outcome->getLooser()->getName(); ?>s
+                        <?php
+                        endif; ?>
+                    <?php
+                    endif; ?>
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h4 class="text-center audiowide"><p>Остаток Health кораблей</p></h4>
+                </div>
+                <?php if ($outcome->getWinner() == null): ?>
+                    <div class="col-md-12 text-center">
+                        <p>У всех кораблей не осталось Health</p>
+                    </div>
+                <?php else: ?>
+                    <div class="col-md-6 text-center">
+                        <h4 class="text-center audiowide"><p><?php echo $outcome->getWinner()->getName(); ?> : <span
+                                        class="badge"><?php echo $outcome->getWinnerHealth(); ?></span></p></h4>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <h4 class="text-center audiowide"><p><?php echo $outcome->getLooser()->getName(); ?> : <span
+                                        class="badge"><?php echo $outcome->getLooserHealth(); ?></span></p></h4>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
-    <a href="/index.php"><p class="text-center"><i class="fa fa-undo"></i> Снова в бой</p></a>
+
+    <a href="/index.php">
+        <p class="text-center">
+            <button type="button" class="btn btn-default btn-lg m 10"><i class="fa fa-undo"></i> Снова в бой</button>
+        </p>
+    </a>
+
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
