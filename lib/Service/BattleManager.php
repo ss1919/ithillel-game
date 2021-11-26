@@ -37,19 +37,25 @@ class BattleManager
             $winningShip = null;
             $losingShip = null;
             $isJediPowerUsed = $ship1UsedJediPowers || $ship2UsedJediPowers;
-            $winningShipHealth = null;
-            $losingShipHealth = null;
+            $winningShipHealth = 0;
+            $losingShipHealth = 0;
+            $winningShipQ = $ship1Quantity;
+            $losingShipQ = $ship2Quantity;
         } elseif ($ship1Health <= 0) {
             $winningShip = $ship2;
             $losingShip = $ship1;
             $winningShipHealth = $ship2Health;
             $losingShipHealth = $ship1Health;
+            $winningShipQ = $ship1Quantity;
+            $losingShipQ = $ship2Quantity;
             $isJediPowerUsed = $ship2UsedJediPowers;
         } else {
             $winningShip = $ship1;
             $losingShip = $ship2;
             $winningShipHealth = $ship1Health;
             $losingShipHealth = $ship2Health;
+            $winningShipQ = $ship1Quantity;
+            $losingShipQ = $ship2Quantity;
             $isJediPowerUsed = $ship1UsedJediPowers;
         }
 
@@ -58,6 +64,8 @@ class BattleManager
             $losingShip,
             $winningShipHealth,
             $losingShipHealth,
+            $winningShipQ,
+            $losingShipQ,
             $isJediPowerUsed
         );
     }

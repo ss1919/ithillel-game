@@ -1,40 +1,45 @@
 <?php
 
-require __DIR__ . '/bootstrap.php';
+    require __DIR__ . '/bootstrap.php';
 
-$shipLoader = new ShipLoader();
-$ships = $shipLoader->getShips();
+    $shipLoader = new ShipLoader($container->getPDO());
+    $ships = $shipLoader->getShips();
 
 
-$ship1Name = $_POST['ship1_name'] ?? null;
-$ship1Quantity = $_POST['ship1_quantity'] ?? 1;
-$ship2Name = $_POST['ship2_name'] ?? null;
-$ship2Quantity = $_POST['ship2_quantity'] ?? 1;
+    $ship1Id = $_POST['ship1_id'] ?? null;
+    $ship1Quantity = $_POST['ship1_quantity'] ?? 1;
+    $ship2Id = $_POST['ship2_id'] ?? null;
+    $ship2Quantity = $_POST['ship2_quantity'] ?? 1;
 
-if (!$ship1Name || !$ship2Name) {
-    header('Location: /index.php?error=missing_data');
-    die;
-}
+    if (!$ship1Id || !$ship2Id) {
+        header('Location: /index.php?error=missing_data');
+        die;
+    }
 
-if (!isset($ships[$ship1Name], $ships[$ship2Name])) {
+
+    if (!isset($ships[$ship1Id], $ships[$ship2Id])) {
     header('Location: /index.php?error=bad_ships');
     die;
-}
+    }
 
-if ($ship1Quantity <= 0 || $ship2Quantity <= 0) {
+    if ($ship1Quantity <= 0 || $ship2Quantity <= 0) {
     header('Location: /index.php?error=bad_quantities');
     die;
-}
+    }
 
-$ship1 = $ships[$ship1Name];
-$ship2 = $ships[$ship2Name];
+    $ship1 = $shipLoader->findOneById((int) $ship1Id);
+    $ship2 = $shipLoader->findOneById((int) $ship2Id);
 
-$battleManager = new BattleManager();
-$outcome = $battleManager->battle($ship1, $ship1Quantity, $ship2, $ship2Quantity);
-?>
+    $battleManager = new BattleManager();
+    $outcome = $battleManager->battle($ship1, $ship1Quantity, $ship2, $ship2Quantity);
+    $battleLoader = new BattleLoader($container->getPDO());
+    $battleLoader->save($outcome);
 
-<html lang="ru">
-<head>
+    ?>
+
+`
+`  <html lang="ru">
+   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -52,9 +57,9 @@ $outcome = $battleManager->battle($ship1, $ship1Quantity, $ship2, $ship2Quantity
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-</head>
-<body>
-<div class="container">
+    </head>
+    <body>
+    <div class="container">
     <div class="page-header">
         <h1>Космическая битва</h1>
     </div>
@@ -105,7 +110,14 @@ $outcome = $battleManager->battle($ship1, $ship1Quantity, $ship2, $ship2Quantity
                         <?php
                         else: ?>
                             одолели и уничтожили  <?php
-                            echo $outcome->getLooser()->getName(); ?>s
+                        if ($outcome->getWinner() == $outcome->getWinner()->getName()) {
+                            echo $outcome->getLooser()->getName();
+                        } else {
+                            echo $outcome->getWinner()->getName();
+                        }
+                            //echo $outcome->getLooser()->getName();
+                            ?>s
+
                         <?php
                         endif; ?>
                     <?php
@@ -116,7 +128,7 @@ $outcome = $battleManager->battle($ship1, $ship1Quantity, $ship2, $ship2Quantity
                 <div class="col-md-12 text-center">
                     <h4 class="text-center audiowide"><p>Остаток Health кораблей</p></h4>
                 </div>
-                <?php if ($outcome->getWinner() == null): ?>
+                <?php if (!$outcome->isThereAWinner()): ?>
                     <div class="col-md-12 text-center">
                         <p>У всех кораблей не осталось Health</p>
                     </div>
@@ -136,15 +148,18 @@ $outcome = $battleManager->battle($ship1, $ship1Quantity, $ship2, $ship2Quantity
 
     <a href="/index.php">
         <p class="text-center">
-            <button type="button" class="btn btn-default btn-lg m 10"><i class="fa fa-undo"></i> Снова в бой</button>
+            <button type="button" class="btn btn-default btn-lg m 10"><i class="fa fa-undo"></i> Снова в бой</button> /
+            <a href="/battlehistory.php"><button type="button" class="btn btn-default btn-lg m 10"><i class="fa fa-undo"></i> История битв</button></a>
         </p>
     </a>
+
+
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-</div>
-</body>
-</html>
+    </div>
+    </body>
+    </html>

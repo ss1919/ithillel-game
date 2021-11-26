@@ -5,11 +5,31 @@ declare(strict_types=1);
 
 class Ship
 {
+    private ?int $id = null;
     private ?string $name = null;
     private int $weaponPower = 0;
     private int $strength = 1;
     private int $jediFactor = 0;
-   // private bool $underRepair;
+    private bool $underRepair;
+
+
+    public function __construct(string $name)
+    {
+        $this->underRepair = random_int(0, 100) < 30;
+        $this->name = $name;
+    }
+
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     public function getName(): ?string
     {
