@@ -16,5 +16,8 @@ require __DIR__ . '/lib/Service/BattleLoader.php';
 require __DIR__ . '/lib/Service/ShipLoader.php';
 require __DIR__ . '/lib/Model/BattleResult.php';
 require __DIR__ . '/lib/Model/Ship.php';
+require __DIR__ . '/lib/Service/ShipStorageInterface.php';
+require __DIR__ . '/lib/Service/PdoShipStorage.php';
+require __DIR__ . '/lib/Service/JsonShipStorage.php';
 
 $container = new Container($configuration);

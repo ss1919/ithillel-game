@@ -5,16 +5,10 @@ declare(strict_types=1);
 class Container
 {
     private array $configuration;
-
     private ?PDO $pdo = null;
+    private ?ShipStorageInterface $shipStorage = null;
 
-    private ?BattleManager $battleManager = null;
-
-    private ?ShipLoader $shipLoader = null;
-
-    public function __construct(
-        array $configuration
-    ) {
+    public function __construct(array $configuration) {
         $this->configuration = $configuration;
     }
 
@@ -32,21 +26,13 @@ class Container
         return $this->pdo;
     }
 
-    public function getBattleManager(): BattleManager
+    public function getShipStorage(): ShipStorageInterface
     {
-        if ($this->battleManager === null) {
-            $this->battleManager = new BattleManager();
+        if ($this->shipStorage === null) {
+             $this->shipStorage = new PdoShipStorage($this->getPDO());
+            //$this->shipStorage = new JsonShipStorage('./resources/ships.json');
         }
 
-        return $this->battleManager;
-    }
-
-    public function getShipLoader(): ShipLoader
-    {
-        if ($this->shipLoader === null) {
-            $this->shipLoader = new ShipLoader($this->getPDO());
-        }
-
-        return $this->shipLoader;
+        return $this->shipStorage;
     }
 }

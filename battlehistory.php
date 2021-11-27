@@ -9,7 +9,7 @@
     }
     $limit = 10;
     $offset = ($page - 1) * $limit;
-    
+
     $battleLoader = new BattleLoader($container->getPDO());
     $battles = $battleLoader->getBattles($offset, $limit);
 
