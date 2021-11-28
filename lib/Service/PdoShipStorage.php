@@ -14,7 +14,7 @@ class PdoShipStorage implements ShipStorageInterface
 
     public function findOneById(int $id): ?Ship
     {
-        $statement = $this->pdo->prepare('SELECT * FROM ships WHERE id = :id');
+        $statement = $this->pdo->prepare('SELECT * FROM ship WHERE id = :id');
         $statement->execute(['id' => $id]);
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         if (empty($result)) {

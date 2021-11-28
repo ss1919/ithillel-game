@@ -19,5 +19,6 @@ require __DIR__ . '/lib/Model/Ship.php';
 require __DIR__ . '/lib/Service/ShipStorageInterface.php';
 require __DIR__ . '/lib/Service/PdoShipStorage.php';
 require __DIR__ . '/lib/Service/JsonShipStorage.php';
+require __DIR__ . '/lib/Model/HistoryCollection.php';
 
 $container = new Container($configuration);
